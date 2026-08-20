@@ -1,0 +1,8 @@
+{
+  "appId": "com.bekar.meter",
+  "appName": "Bekar Meter",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}
