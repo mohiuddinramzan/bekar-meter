@@ -1,22 +1,29 @@
-name: Build APK
+name: Build and Release APK
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
+    name: Build Android APK
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
       - name: Setup JDK
         uses: actions/setup-java@v4
@@ -37,8 +44,25 @@ jobs:
         working-directory: android
         run: ./gradlew assembleDebug
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - name: Rename APK
+        run: |
+          cp android/app/build/outputs/apk/debug/app-debug.apk \
+             android/app/build/outputs/apk/debug/bekar-meter.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: bekar-meter-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          tag_name: v${{ github.run_number }}
+          name: Bekar Meter v${{ github.run_number }}
+          body: |
+            ## Bekar Meter APK
+
+            নতুন APK build করা হয়েছে।
+
+            ### Download
+            নিচের `bekar-meter.apk` ফাইলটি ডাউনলোড করে Android ফোনে install করুন।
+
+            Commit: ${{ github.sha }}
+          files: |
+            android/app/build/outputs/apk/debug/bekar-meter.apk
+          generate_release_notes: true
