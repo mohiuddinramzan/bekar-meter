@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="description" content="বেকার মিটার - তোমার বেকারত্ব মাপো, চ্যালেঞ্জ নাও, এক্সকিউজ বানাও!" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>বেকার মিটার | Bekar Meter</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- Splash / Loading -->
+  <div id="splash" class="splash">
+    <div class="splash-content">
+      <div class="logo-big">😴</div>
+      <h1>বেকার মিটার</h1>
+      <p>তোমার বেকারত্বের স্তর মাপছি...</p>
+      <div class="loader"></div>
+    </div>
+  </div>
+
+  <!-- App Shell -->
+  <div id="app" class="app hidden">
+    <!-- Top Header -->
+    <header class="header">
+      <div class="header-left">
+        <span class="logo">😴</span>
+        <div>
+          <h1 class="app-title">বেকার মিটার</h1>
+          <p class="app-subtitle">Version 1.0</p>
+        </div>
+      </div>
+      <button id="btn-profile" class="icon-btn" title="প্রোফাইল">👤</button>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main" class="main">
+      <!-- ==================== DASHBOARD ==================== -->
+      <section id="page-dashboard" class="page active">
+        <div class="card score-card">
+          <div class="score-ring-wrap">
+            <svg class="score-ring" viewBox="0 0 120 120">
+              <circle class="ring-bg" cx="60" cy="60" r="54" />
+              <circle id="score-progress" class="ring-progress" cx="60" cy="60" r="54" />
+            </svg>
+            <div class="score-center">
+              <span id="beker-score" class="score-value">0</span>
+              <span class="score-label">Beker Score</span>
+            </div>
+          </div>
+          <div class="level-info">
+            <span id="beker-level-emoji" class="level-emoji">🌱</span>
+            <div>
+              <p class="level-title">লেভেল</p>
+              <h2 id="beker-level" class="level-name">নতুন বেকার</h2>
+            </div>
+          </div>
+        </div>
+
+        <div class="card report-card">
+          <h3>📊 আজকের রিপোর্ট</h3>
+          <div class="report-grid">
+            <div class="report-item">
+              <span class="report-value" id="today-hours">0</span>
+              <span class="report-label">ঘন্টা বেকার</span>
+            </div>
+            <div class="report-item">
+              <span class="report-value" id="today-challenges">0</span>
+              <span class="report-label">চ্যালেঞ্জ</span>
+            </div>
+            <div class="report-item">
+              <span class="report-value" id="today-excuses">0</span>
+              <span class="report-label">এক্সকিউজ</span>
+            </div>
+            <div class="report-item">
+              <span class="report-value" id="streak-days">0</span>
+              <span class="report-label">স্ট্রিক (দিন)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card tip-card">
+          <h3>💡 আজকের টিপ</h3>
+          <p id="daily-tip">বেকার থাকলেও স্কিল বাড়াও — কোডিং শিখো বা নতুন কিছু ট্রাই করো!</p>
+        </div>
+      </section>
+
+      <!-- ==================== TIMER ==================== -->
+      <section id="page-timer" class="page">
+        <div class="card timer-card">
+          <h2>⏱️ বেকার টাইমার</h2>
+          <p class="timer-desc">আজ কতক্ষণ বেকার ছিলে সেটা ট্র্যাক করো</p>
+          
+          <div class="timer-display">
+            <span id="timer-hours">00</span>:<span id="timer-mins">00</span>:<span id="timer-secs">00</span>
+          </div>
+
+          <div class="timer-controls">
+            <button id="btn-timer-start" class="btn btn-primary">▶️ শুরু</button>
+            <button id="btn-timer-pause" class="btn btn-secondary hidden">⏸️ পজ</button>
+            <button id="btn-timer-reset" class="btn btn-outline">🔄 রিসেট</button>
+          </div>
+
+          <div class="timer-stats">
+            <p>মোট বেকার সময় (সবসময়): <strong id="total-bekar-time">0 ঘন্টা</strong></p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>📅 সাপ্তাহিক হিস্টোরি</h3>
+          <div id="weekly-chart" class="weekly-bars">
+            <!-- JS will fill -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CHALLENGE ==================== -->
+      <section id="page-challenge" class="page">
+        <div class="card challenge-card">
+          <h2>🎲 আজকের চ্যালেঞ্জ</h2>
+          <div id="challenge-box" class="challenge-box">
+            <p id="challenge-text">লোড হচ্ছে...</p>
+            <span id="challenge-points" class="points-badge">+10 পয়েন্ট</span>
+          </div>
+          <div class="challenge-actions">
+            <button id="btn-challenge-done" class="btn btn-primary">✅ সম্পন্ন করেছি</button>
+            <button id="btn-challenge-skip" class="btn btn-outline">⏭️ স্কিপ</button>
+            <button id="btn-challenge-new" class="btn btn-secondary">🔄 নতুন চ্যালেঞ্জ</button>
+          </div>
+          <p class="challenge-note">প্রতিদিন একটা করে চ্যালেঞ্জ সম্পন্ন করলে স্ট্রিক বাড়বে!</p>
+        </div>
+
+        <div class="card">
+          <h3>🏆 সম্পন্ন চ্যালেঞ্জ</h3>
+          <ul id="completed-challenges" class="list">
+            <li class="empty">এখনো কোনো চ্যালেঞ্জ সম্পন্ন হয়নি</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ==================== EXCUSE GENERATOR ==================== -->
+      <section id="page-excuse" class="page">
+        <div class="card excuse-card">
+          <h2>🤥 এক্সকিউজ জেনারেটর</h2>
+          <p class="excuse-desc">কোনো কাজ করতে চাও না? একটা পারফেক্ট এক্সকিউজ বানাও!</p>
+          
+          <div class="excuse-categories">
+            <button class="cat-btn active" data-cat="work">কাজ/অফিস</button>
+            <button class="cat-btn" data-cat="study">পড়াশোনা</button>
+            <button class="cat-btn" data-cat="family">পরিবার</button>
+            <button class="cat-btn" data-cat="random">র‍্যান্ডম</button>
+          </div>
+
+          <div id="excuse-result" class="excuse-result">
+            <p id="excuse-text">বাটনে চাপ দিয়ে এক্সকিউজ জেনারেট করো 👆</p>
+          </div>
+
+          <div class="excuse-actions">
+            <button id="btn-generate-excuse" class="btn btn-primary">🎲 এক্সকিউজ বানাও</button>
+            <button id="btn-copy-excuse" class="btn btn-outline">📋 কপি</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== ACHIEVEMENTS ==================== -->
+      <section id="page-achievements" class="page">
+        <div class="card">
+          <h2>🏆 অ্যাচিভমেন্টস</h2>
+          <p class="ach-desc">তোমার বেকার যাত্রার মাইলস্টোনগুলো</p>
+          <div id="achievements-grid" class="achievements-grid">
+            <!-- JS will populate -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SHARE CARD ==================== -->
+      <section id="page-share" class="page">
+        <div class="card share-card">
+          <h2>📸 শেয়ার বেকার কার্ড</h2>
+          <p>তোমার বেকার স্ট্যাটাস সোশ্যাল মিডিয়ায় শেয়ার করো!</p>
+          
+          <div id="bekar-card" class="bekar-card">
+            <div class="card-header">
+              <span>😴 বেকার মিটার</span>
+              <span id="card-date"></span>
+            </div>
+            <div class="card-body">
+              <div class="card-score">
+                <span id="card-score-value">0</span>
+                <small>Beker Score</small>
+              </div>
+              <div class="card-level">
+                <span id="card-level-emoji">🌱</span>
+                <strong id="card-level-name">নতুন বেকার</strong>
+              </div>
+              <div class="card-stats">
+                <div><span id="card-hours">0</span><br><small>ঘন্টা</small></div>
+                <div><span id="card-streak">0</span><br><small>স্ট্রিক</small></div>
+                <div><span id="card-challenges">0</span><br><small>চ্যালেঞ্জ</small></div>
+              </div>
+            </div>
+            <div class="card-footer">#BekarMeter #বেকারমিটার</div>
+          </div>
+
+          <div class="share-actions">
+            <button id="btn-download-card" class="btn btn-primary">⬇️ ডাউনলোড</button>
+            <button id="btn-share-card" class="btn btn-secondary">📤 শেয়ার</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-page="dashboard">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">ড্যাশবোর্ড</span>
+      </button>
+      <button class="nav-item" data-page="timer">
+        <span class="nav-icon">⏱️</span>
+        <span class="nav-label">টাইমার</span>
+      </button>
+      <button class="nav-item" data-page="challenge">
+        <span class="nav-icon">🎲</span>
+        <span class="nav-label">চ্যালেঞ্জ</span>
+      </button>
+      <button class="nav-item" data-page="excuse">
+        <span class="nav-icon">🤥</span>
+        <span class="nav-label">এক্সকিউজ</span>
+      </button>
+      <button class="nav-item" data-page="achievements">
+        <span class="nav-icon">🏆</span>
+        <span class="nav-label">অ্যাচিভ</span>
+      </button>
+      <button class="nav-item" data-page="share">
+        <span class="nav-icon">📸</span>
+        <span class="nav-label">শেয়ার</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- Profile Modal -->
+  <div id="profile-modal" class="modal hidden">
+    <div class="modal-content">
+      <button class="modal-close" id="close-profile">✕</button>
+      <h2>👤 প্রোফাইল</h2>
+      <div class="form-group">
+        <label>তোমার নাম</label>
+        <input type="text" id="user-name" placeholder="নাম লিখো..." maxlength="20" />
+      </div>
+      <button id="btn-save-profile" class="btn btn-primary">💾 সেভ</button>
+      <button id="btn-reset-data" class="btn btn-danger">🗑️ সব ডাটা মুছো</button>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
